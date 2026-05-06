@@ -61,6 +61,15 @@ export class Invoice {
   })
   riskGrade: RiskGrade;
 
+  @Column({ nullable: true })
+  stellarTokenId: string; // Stellar token ID after tokenization
+
+  @Column({ nullable: true })
+  tokenizationTxHash: string; // Transaction hash of tokenization
+
+  @Column({ type: "datetime", nullable: true })
+  tokenizedAt: Date; // When the invoice was tokenized
+
   @CreateDateColumn()
   createdAt: Date;
 
