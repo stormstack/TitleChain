@@ -1,0 +1,107 @@
+# --------------------
+# OS FILES
+# --------------------
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# --------------------
+# LOGS
+# --------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# --------------------
+# ENVIRONMENT FILES
+# --------------------
+.env
+.env.*
+*.env
+
+# --------------------
+# DEPENDENCIES
+# --------------------
+node_modules/
+vendor/
+
+# --------------------
+# BUILD OUTPUT
+# --------------------
+dist/
+build/
+out/
+coverage/
+.tmp/
+.temp/
+
+# --------------------
+# CACHE
+# --------------------
+.cache/
+*.cache
+
+# --------------------
+# IDE / EDITOR
+# --------------------
+.vscode/
+.idea/
+*.swp
+*.swo
+*.swn
+
+# --------------------
+# TYPESCRIPT
+# --------------------
+*.tsbuildinfo
+
+# --------------------
+# PYTHON
+# --------------------
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.venv/
+venv/
+env/
+
+# --------------------
+# DATABASE
+# --------------------
+*.sqlite
+*.db
+
+# --------------------
+# TEST OUTPUT
+# --------------------
+coverage/
+.nyc_output/
+
+# --------------------
+# DOCKER
+# --------------------
+docker-compose.override.yml
+
+# --------------------
+# NEXT.JS / REACT / FRONTEND
+# --------------------
+.next/
+.nuxt/
+.svelte-kit/
+dist/
+build/
+
+# --------------------
+# MISC
+# --------------------
+*.zip
+*.tar
+*.gz
+*.rar
+*.7z
