@@ -14,6 +14,7 @@ export class RepaymentService implements OnModuleInit {
     @InjectRepository(FundingTransaction)
     private readonly fundingTransactionRepository: Repository<FundingTransaction>,
     private readonly repaymentSplitter: RepaymentSplitter,
+    @Inject(forwardRef(() => HorizonListener))
     private readonly horizonListener: HorizonListener,
     private readonly stellarClient: StellarClient,
   ) {}
