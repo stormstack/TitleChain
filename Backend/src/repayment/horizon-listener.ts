@@ -28,7 +28,7 @@ export class HorizonListener implements OnModuleInit {
   private isListening = false;
   private pollInterval: NodeJS.Timeout | null = null;
 
-  constructor() {
+  constructor(private readonly repaymentService: RepaymentService) {
     this.horizonServer = new Horizon.Server(
       process.env.STELLAR_HORIZON_URL || 'https://horizon-testnet.stellar.org'
     );
