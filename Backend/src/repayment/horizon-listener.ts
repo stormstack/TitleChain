@@ -1,4 +1,4 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit, forwardRef, Inject } from '@nestjs/common';
 import { Server } from '@stellar/stellar-sdk';
 import { Horizon } from '@stellar/stellar-sdk';
 import { FundingTransaction, TransactionStatus } from './funding-transaction.entity';
