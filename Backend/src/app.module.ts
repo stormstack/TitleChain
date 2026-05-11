@@ -1,9 +1,11 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { AuthModule } from "./auth/auth.module";
 import { InvoicesModule } from "./invoices/invoices.module";
 import { RiskModule } from "./risk/risk.module";
 import { StellarModule } from "./stellar/stellar.module";
+import { UsersModule } from "./users/users.module";
 
 @Module({
   imports: [
@@ -20,6 +22,8 @@ import { StellarModule } from "./stellar/stellar.module";
       entities: [__dirname + "/**/*.entity{.ts,.js}"],
       synchronize: process.env.NODE_ENV !== "production",
     }),
+    UsersModule,
+    AuthModule,
     InvoicesModule,
     RiskModule,
     StellarModule,
