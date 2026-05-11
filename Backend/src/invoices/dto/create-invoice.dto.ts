@@ -20,7 +20,7 @@ export class CreateInvoiceDto {
 
   @IsOptional()
   @IsEnum(InvoiceStatus)
-  status?: InvoiceStatus;
+  status?: InvoiceStatus = InvoiceStatus.PENDING_VERIFICATION;
 
   @IsOptional()
   @IsNumber()
@@ -32,4 +32,8 @@ export class CreateInvoiceDto {
   @IsNumber()
   @Min(0)
   businessHistoryMonths?: number;
+
+  @IsOptional()
+  @IsString()
+  uploadedBy?: string; // Business user ID who uploaded
 }
