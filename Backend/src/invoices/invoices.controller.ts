@@ -138,4 +138,37 @@ export class InvoicesController {
       throw error;
     }
   }
+
+  @Get(":id/download")
+  async downloadInvoice(@Param("id") id: string, @Res() res: Response) {
+    try {
+      const { file, filename, mimeType } = await this.invoicesService.getInvoiceFile(id);
+      
+      res.set({
+        'Content-Type': mimeType,
+        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Length': file.length,
+      });
+      
+      res.send(file);
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
+
+  @Delete(":id/file")
+  async deleteInvoiceFile(@Param("id") id: string) {
+    try {
+      await this.invoicesService.deleteInvoiceFile(id);
+      return { message: 'Invoice file deleted successfully' };
+    } catch (error) {
+      if (error instanceof NotFoundException) {
+        throw new NotFoundException(error.message);
+      }
+      throw error;
+    }
+  }
 }
