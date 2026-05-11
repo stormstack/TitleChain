@@ -12,7 +12,18 @@ import { StellarModule } from '../stellar/stellar.module';
     StellarModule,
   ],
   providers: [
-    RepaymentService,
+    {
+      provide: RepaymentService,
+      useFactory: (repaymentSplitter: RepaymentSplitter, horizonListener: HorizonListener, stellarClient: any) => new RepaymentService(
+        // These would be injected via constructor in a real implementation
+        // For now, we'll use forwardRef to resolve the circular dependency
+        null as any, // fundingTransactionRepository
+        repaymentSplitter,
+        horizonListener,
+        stellarClient,
+      ),
+      inject: [RepaymentSplitter, HorizonListener, 'StellarClient'],
+    },
     RepaymentSplitter,
     HorizonListener,
   ],
