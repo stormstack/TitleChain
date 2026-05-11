@@ -24,6 +24,7 @@ import { RepaymentModule } from "./repayment/repayment.module";
     InvoicesModule,
     RiskModule,
     StellarModule,
+    RepaymentModule,
   ],
 })
 export class AppModule {}
