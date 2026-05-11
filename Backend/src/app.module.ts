@@ -4,6 +4,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { InvoicesModule } from "./invoices/invoices.module";
 import { RiskModule } from "./risk/risk.module";
 import { StellarModule } from "./stellar/stellar.module";
+import { RepaymentModule } from "./repayment/repayment.module";
 
 @Module({
   imports: [
