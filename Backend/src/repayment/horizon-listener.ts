@@ -167,12 +167,8 @@ export class HorizonListener implements OnModuleInit {
 
       const transactionId = memoParts[1];
       
-      // This would be injected via dependency injection in a real implementation
-      // For now, we'll emit an event that the RepaymentService can handle
-      this.logger.log(`Payment for transaction ${transactionId} detected`);
-      
-      // In a real implementation, you would emit an event or call a service directly
-      // await this.repaymentService.processRepayment(transactionId, paymentEvent);
+      // Call RepaymentService to process the payment
+      await this.repaymentService.processRepayment(transactionId, paymentEvent);
       
     } catch (error) {
       this.logger.error(`Error processing payment ${paymentEvent.id}:`, error);
