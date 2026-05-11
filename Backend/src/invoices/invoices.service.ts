@@ -14,6 +14,8 @@ import {
   TokenizationService,
   TokenizationResult,
 } from "../stellar/tokenization.service";
+import * as path from "path";
+import * as fs from "fs";
 
 @Injectable()
 export class InvoicesService {
