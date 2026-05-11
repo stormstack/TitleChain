@@ -8,11 +8,18 @@ import {
   Delete,
   NotFoundException,
   BadRequestException,
+  UseInterceptors,
+  UploadedFile,
+  Res,
+  HttpStatus,
 } from "@nestjs/common";
+import { FileInterceptor } from "@nestjs/platform-express";
+import { Response } from "express";
 import { InvoicesService } from "./invoices.service";
 import { Invoice, InvoiceStatus } from "./invoice.entity";
 import { CreateInvoiceDto } from "./dto/create-invoice.dto";
 import { UpdateInvoiceDto } from "./dto/update-invoice.dto";
+import { UploadInvoiceDto } from "./dto/upload-invoice.dto";
 
 @Controller("invoices")
 export class InvoicesController {
@@ -21,6 +28,46 @@ export class InvoicesController {
   @Post()
   create(@Body() createInvoiceDto: CreateInvoiceDto) {
     return this.invoicesService.create(createInvoiceDto);
+  }
+
+  @Post('upload')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadInvoice(
+    @UploadedFile() file: Express.Multer.File,
+    @Body() uploadInvoiceDto: UploadInvoiceDto,
+  ) {
+    if (!file) {
+      throw new BadRequestException('File is required');
+    }
+
+    // Validate file type (PDF, DOC, DOCX, etc.)
+    const allowedMimeTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'image/jpeg',
+      'image/png',
+    ];
+
+    if (!allowedMimeTypes.includes(file.mimetype)) {
+      throw new BadRequestException(
+        'Invalid file type. Only PDF, DOC, DOCX, JPEG, and PNG files are allowed',
+      );
+    }
+
+    // Validate file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      throw new BadRequestException('File size too large. Maximum size is 10MB');
+    }
+
+    const invoiceData = {
+      ...uploadInvoiceDto,
+      dueDate: new Date(uploadInvoiceDto.dueDate),
+      amount: uploadInvoiceDto.amount || 0,
+    };
+
+    return this.invoicesService.createWithFileUpload(invoiceData, file);
   }
 
   @Get()
