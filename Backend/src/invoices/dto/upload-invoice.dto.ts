@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEnum } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber, Min, Max } from 'class-validator';
 import { InvoiceStatus } from '../invoice.entity';
 
 export class UploadInvoiceDto {
