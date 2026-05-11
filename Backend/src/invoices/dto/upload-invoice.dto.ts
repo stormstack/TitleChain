@@ -1,13 +1,9 @@
-import { IsString, IsNumber, IsDate, IsOptional, IsEnum, Min, Max } from 'class-validator';
+import { IsString, IsOptional, IsEnum, IsNumber, Min, Max } from 'class-validator';
 import { InvoiceStatus } from '../invoice.entity';
 
-export class CreateInvoiceDto {
+export class UploadInvoiceDto {
   @IsString()
   invoiceNumber: string;
-
-  @IsNumber()
-  @Min(0)
-  amount: number;
 
   @IsString()
   counterpartyId: string;
@@ -15,8 +11,12 @@ export class CreateInvoiceDto {
   @IsString()
   counterpartyName: string;
 
-  @IsDate()
-  dueDate: Date;
+  @IsString()
+  dueDate: string; // Will be parsed as Date
+
+  @IsOptional()
+  @IsNumber()
+  amount?: number;
 
   @IsOptional()
   @IsEnum(InvoiceStatus)
