@@ -14,6 +14,8 @@ import {
   TokenizationService,
   TokenizationResult,
 } from "../stellar/tokenization.service";
+import * as path from "path";
+import * as fs from "fs";
 
 @Injectable()
 export class InvoicesService {
@@ -131,6 +133,73 @@ export class InvoicesService {
   async findTokenizedInvoices(): Promise<Invoice[]> {
     return await this.invoiceRepository.find({
       where: { stellarTokenId: null },
+    });
+  }
+
+  async createWithFileUpload(
+    invoiceData: Partial<Invoice>,
+    file: Express.Multer.File,
+  ): Promise<Invoice> {
+    // Ensure upload directory exists
+    const uploadDir = path.join(process.cwd(), 'uploads', 'invoices');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    // Generate unique filename
+    const fileExtension = path.extname(file.originalname);
+    const uniqueFileName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${fileExtension}`;
+    const filePath = path.join(uploadDir, uniqueFileName);
+
+    // Save file to disk
+    fs.writeFileSync(filePath, file.buffer);
+
+    // Create invoice with file information
+    const invoice = this.invoiceRepository.create({
+      ...invoiceData,
+      status: InvoiceStatus.PENDING_VERIFICATION,
+      documentFileName: file.originalname,
+      documentFilePath: filePath,
+      documentMimeType: file.mimetype,
+      documentSize: file.size,
+    });
+
+    return await this.invoiceRepository.save(invoice);
+  }
+
+  async getInvoiceFile(invoiceId: string): Promise<{ file: Buffer; filename: string; mimeType: string }> {
+    const invoice = await this.findOne(invoiceId);
+
+    if (!invoice.documentFilePath) {
+      throw new NotFoundException(`Invoice ${invoiceId} has no associated document`);
+    }
+
+    if (!fs.existsSync(invoice.documentFilePath)) {
+      throw new NotFoundException(`Document file not found for invoice ${invoiceId}`);
+    }
+
+    const fileBuffer = fs.readFileSync(invoice.documentFilePath);
+
+    return {
+      file: fileBuffer,
+      filename: invoice.documentFileName,
+      mimeType: invoice.documentMimeType,
+    };
+  }
+
+  async deleteInvoiceFile(invoiceId: string): Promise<void> {
+    const invoice = await this.findOne(invoiceId);
+
+    if (invoice.documentFilePath && fs.existsSync(invoice.documentFilePath)) {
+      fs.unlinkSync(invoice.documentFilePath);
+    }
+
+    // Update invoice to remove file information
+    await this.invoiceRepository.update(invoiceId, {
+      documentFileName: null,
+      documentFilePath: null,
+      documentMimeType: null,
+      documentSize: null,
     });
   }
 }

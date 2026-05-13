@@ -8,6 +8,7 @@ import {
 
 export enum InvoiceStatus {
   PENDING = "pending",
+  PENDING_VERIFICATION = "pending_verification",
   VERIFIED = "verified",
   REJECTED = "rejected",
 }
@@ -41,9 +42,24 @@ export class Invoice {
   @Column({
     type: "enum",
     enum: InvoiceStatus,
-    default: InvoiceStatus.PENDING,
+    default: InvoiceStatus.PENDING_VERIFICATION,
   })
   status: InvoiceStatus;
+
+  @Column({ nullable: true })
+  documentFileName: string;
+
+  @Column({ nullable: true })
+  documentFilePath: string;
+
+  @Column({ nullable: true })
+  documentMimeType: string;
+
+  @Column({ nullable: true })
+  documentSize: number;
+
+  @Column({ nullable: true })
+  uploadedBy: string; // Business user ID who uploaded
 
   @Column({ nullable: true })
   counterpartyReputation: number; // 1-100 score
